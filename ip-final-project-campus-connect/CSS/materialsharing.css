@@ -1,0 +1,272 @@
+
+.materials-hero {
+    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+    padding: 60px 20px;
+    text-align: center;
+    color: white;
+    margin-top: 0;
+}
+
+.materials-hero h1 {
+    font-size: 48px;
+    margin-bottom: 15px;
+    font-weight: 700;
+    font-family: 'Cormorant Garamond', serif;
+}
+
+.materials-hero p {
+    font-size: 18px;
+    opacity: 0.95;
+}
+
+/* Upload Button Container */
+.upload-btn-container {
+    text-align: center;
+    margin: 40px 0 20px;
+}
+
+.upload-btn-large {
+    background: linear-gradient(135deg, #11998e, #38ef7d);
+    border: none;
+    padding: 14px 40px;
+    border-radius: 50px;
+    color: white;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    transition: transform 0.3s, box-shadow 0.3s;
+    box-shadow: 0 5px 20px rgba(56, 239, 125, 0.3);
+}
+
+.upload-btn-large:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(56, 239, 125, 0.4);
+}
+
+/* Search Section */
+.search-section {
+    max-width: 600px;
+    margin: 0 auto 40px;
+    padding: 0 20px;
+}
+
+.search-input {
+    width: 100%;
+    padding: 14px 20px;
+    border: 2px solid #e0e0e0;
+    border-radius: 50px;
+    font-size: 16px;
+    transition: all 0.3s;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: #11998e;
+    box-shadow: 0 0 0 3px rgba(17, 153, 142, 0.1);
+}
+
+/* Materials Grid */
+.materials-grid {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 30px;
+}
+
+/* Material Card */
+.material-card {
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.material-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+}
+
+/* Card Header */
+.material-card-header {
+    background: linear-gradient(135deg, #11998e, #38ef7d);
+    padding: 20px;
+    color: white;
+}
+
+.material-card-header h3 {
+    font-size: 18px;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Card Body */
+.material-card-body {
+    padding: 20px;
+}
+
+/* Info Rows */
+.material-info {
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #555;
+    font-size: 14px;
+}
+
+.material-info i {
+    width: 20px;
+    color: #11998e;
+}
+
+.material-info strong {
+    font-weight: 600;
+    color: #333;
+}
+
+/* Action Buttons */
+.material-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+}
+
+.btn-download {
+    flex: 1;
+    background: linear-gradient(135deg, #11998e, #38ef7d);
+    color: white;
+    padding: 10px;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    transition: opacity 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.btn-download:hover {
+    opacity: 0.9;
+}
+
+.btn-delete {
+    background: #dc3545;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background 0.3s;
+}
+
+.btn-delete:hover {
+    background: #c82333;
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 60px;
+    color: #666;
+    background: white;
+    border-radius: 16px;
+    grid-column: 1 / -1;
+}
+
+.empty-state i {
+    font-size: 64px;
+    color: #11998e;
+    margin-bottom: 20px;
+}
+
+.empty-state h3 {
+    font-size: 24px;
+    margin-bottom: 10px;
+    color: #333;
+    font-family: 'Cormorant Garamond', serif;
+}
+
+.empty-state p {
+    margin-bottom: 20px;
+}
+
+/* Loading State */
+.loading-state {
+    text-align: center;
+    padding: 60px;
+    grid-column: 1 / -1;
+}
+
+.loading-spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #11998e;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 20px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .materials-hero h1 {
+        font-size: 32px;
+    }
+    
+    .materials-hero p {
+        font-size: 16px;
+    }
+    
+    .materials-grid {
+        grid-template-columns: 1fr;
+        padding: 15px;
+    }
+    
+    .upload-btn-large {
+        padding: 12px 25px;
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .materials-hero {
+        padding: 40px 15px;
+    }
+    
+    .materials-hero h1 {
+        font-size: 28px;
+    }
+    
+    .material-card-header h3 {
+        font-size: 16px;
+    }
+    
+    .material-info {
+        font-size: 12px;
+    }
+}

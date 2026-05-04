@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - Campus Connect</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- GLOBAL CSS (navbar, footer, common styles) -->
+    <link rel="stylesheet" href="../CSS/global.css">
+    
+    <style>
+        .profile-container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        
+        .profile-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .profile-header {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            padding: 40px;
+            text-align: center;
+            color: white;
+        }
+        
+        .avatar {
+            width: 100px;
+            height: 100px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 40px;
+            color: #11998e;
+        }
+        
+        .profile-header h2 {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .profile-header p {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+        
+        .profile-body {
+            padding: 30px;
+        }
+        
+        .info-group {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .info-group:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+        
+        .info-group label {
+            display: block;
+            font-weight: 600;
+            color: #666;
+            margin-bottom: 8px;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .info-group label i {
+            margin-right: 8px;
+            color: #11998e;
+        }
+        
+        .info-group p {
+            font-size: 1.1rem;
+            color: #333;
+        }
+        
+        .edit-btn {
+            background: #11998e;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+        
+        .edit-btn:hover {
+            background: #0d7a6e;
+            transform: translateY(-2px);
+        }
+        
+        .edit-btn i {
+            margin-right: 8px;
+        }
+        
+        .edit-form {
+            display: none;
+        }
+        
+        .edit-form h3 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            color: #1a1a1a;
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .edit-form h3 i {
+            color: #11998e;
+            margin-right: 10px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #11998e;
+            box-shadow: 0 0 0 3px rgba(17, 153, 142, 0.1);
+        }
+        
+        .form-group textarea {
+            resize: vertical;
+        }
+        
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .save-btn {
+            background: #28a745;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            flex: 1;
+        }
+        
+        .save-btn:hover {
+            background: #218838;
+            transform: translateY(-2px);
+        }
+        
+        .cancel-btn {
+            background: #dc3545;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            flex: 1;
+        }
+        
+        .cancel-btn:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+        }
+        
+        .password-section {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #eee;
+        }
+        
+        .password-section h3 {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: #1a1a1a;
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .password-section h3 i {
+            color: #11998e;
+            margin-right: 10px;
+        }
+        
+        .change-pwd-btn {
+            background: #6c757d;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            width: 100%;
+        }
+        
+        .change-pwd-btn:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+        
+        @media (max-width: 768px) {
+            .profile-container {
+                margin: 20px auto;
+            }
+            .profile-header {
+                padding: 30px 20px;
+            }
+            .profile-body {
+                padding: 20px;
+            }
+            .avatar {
+                width: 80px;
+                height: 80px;
+                font-size: 32px;
+            }
+            .profile-header h2 {
+                font-size: 1.5rem;
+            }
+            .info-group p {
+                font-size: 1rem;
+            }
+            .form-actions {
+                flex-direction: column;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .profile-header {
+                padding: 20px;
+            }
+            .avatar {
+                width: 60px;
+                height: 60px;
+                font-size: 28px;
+            }
+            .profile-header h2 {
+                font-size: 1.3rem;
+            }
+            .info-group p {
+                font-size: 0.9rem;
+            }
+            .edit-btn, .save-btn, .cancel-btn {
+                padding: 10px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <nav class="navbar">
+        <div class="logo">
+            <img src="../IMAGES/pro logo-modified.png" alt="Campus Connect Logo" class="logo-img" onerror="this.src='https://via.placeholder.com/40x40?text=CC'">
+            Campus Connect
+        </div>
+        
+        <button class="burger-menu" id="burgerMenu" aria-label="Menu">
+            <i class="fas fa-bars" id="burgerIcon"></i>
+        </button>
+        
+        <ul class="nav-links" id="navLinks">
+            <li><a href="home.html">Home</a></li>
+            <li class="dropdown">
+                <a href="#">Resources <i class="fas fa-chevron-down"></i></a>
+                <ul class="dropdown-menu">
+                    <li><a href="materials.html"><i class="fas fa-book"></i> Study Materials</a></li>
+                    <li><a href="studygroup.html"><i class="fas fa-users"></i> Study Groups</a></li>
+                    <li><a href="department.html"><i class="fas fa-building"></i> Departments</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#">Opportunities <i class="fas fa-chevron-down"></i></a>
+                <ul class="dropdown-menu">
+                    <li><a href="internship.html"><i class="fas fa-briefcase"></i> Internships</a></li>
+                    <li><a href="mentors.html"><i class="fas fa-chalkboard-user"></i> Mentors</a></li>
+                </ul>
+            </li>
+            <li class="dropdown" id="userDropdown" style="display: none;">
+                <a href="#">Account <i class="fas fa-chevron-down"></i></a>
+                <ul class="dropdown-menu">
+                    <li id="dashboardLink"><a href="dashboard.html"><i class="fas fa-chart-line"></i> Dashboard</a></li>
+                    <li id="profileLink"><a href="profile.html" class="active"><i class="fas fa-user-circle"></i> Profile</a></li>
+                    <li id="logoutLink"><a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                </ul>
+            </li>
+            <li id="loginLink"><a href="login.html"><i class="fas fa-sign-in-alt"></i> Login</a></li>
+            <li id="registerLink"><a href="register.html"><i class="fas fa-user-plus"></i> Register</a></li>
+            <li class="search-nav-item">
+                <form action="search.html" method="get" class="search-form">
+                    <input type="text" name="q" placeholder="Search..." required>
+                    <button type="submit" aria-label="Search"><i class="fas fa-search"></i></button>
+                </form>
+            </li>
+            <li class="notification-li">
+                <div class="notification-bell">
+                    <i class="fas fa-bell"></i>
+                    <span id="notificationBadge" class="notification-badge" style="display:none;">0</span>
+                </div>
+                <div id="notificationDropdown" class="notification-dropdown"></div>
+            </li>
+        </ul>
+    </nav>
+</header>
+
+<main>
+    <div class="profile-container">
+        <div class="profile-card">
+            <div class="profile-header">
+                <div class="avatar">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <h2 id="profileName">Loading...</h2>
+                <p id="profileRole">Student</p>
+            </div>
+            <div class="profile-body">
+                <div id="viewMode">
+                    <div class="info-group">
+                        <label><i class="fas fa-envelope"></i> Email</label>
+                        <p id="displayEmail">-</p>
+                    </div>
+                    <div class="info-group">
+                        <label><i class="fas fa-id-card"></i> Student ID</label>
+                        <p id="displayStudentId">-</p>
+                    </div>
+                    <div class="info-group">
+                        <label><i class="fas fa-building"></i> Department</label>
+                        <p id="displayDepartment">-</p>
+                    </div>
+                    <div class="info-group">
+                        <label><i class="fas fa-graduation-cap"></i> Year</label>
+                        <p id="displayYear">-</p>
+                    </div>
+                    <div class="info-group">
+                        <label><i class="fas fa-phone"></i> Phone</label>
+                        <p id="displayPhone">-</p>
+                    </div>
+                    <div class="info-group">
+                        <label><i class="fas fa-info-circle"></i> Bio</label>
+                        <p id="displayBio">-</p>
+                    </div>
+                    <button class="edit-btn" id="editProfileBtn">
+                        <i class="fas fa-edit"></i> Edit Profile
+                    </button>
+                    <div class="password-section">
+                        <h3><i class="fas fa-lock"></i> Security</h3>
+                        <button class="change-pwd-btn" id="changePwdBtn">
+                            <i class="fas fa-key"></i> Change Password
+                        </button>
+                    </div>
+                </div>
+
+                <div id="editMode" class="edit-form">
+                    <h3><i class="fas fa-pencil-alt"></i> Edit Profile</h3>
+                    <div class="form-group">
+                        <label>Department</label>
+                        <input type="text" id="editDepartment" placeholder="e.g., Software Engineering">
+                    </div>
+                    <div class="form-group">
+                        <label>Year</label>
+                        <select id="editYear">
+                            <option value="1">1st Year</option>
+                            <option value="2">2nd Year</option>
+                            <option value="3">3rd Year</option>
+                            <option value="4">4th Year</option>
+                            <option value="5">5th Year</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Phone Number</label>
+                        <input type="tel" id="editPhone" placeholder="+251 912 345 678">
+                    </div>
+                    <div class="form-group">
+                        <label>Bio</label>
+                        <textarea id="editBio" rows="4" placeholder="Tell us about yourself..."></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button class="save-btn" id="saveProfileBtn">Save Changes</button>
+                        <button class="cancel-btn" id="cancelEditBtn">Cancel</button>
+                    </div>
+                </div>
+
+                <div id="changePwdMode" class="edit-form">
+                    <h3><i class="fas fa-key"></i> Change Password</h3>
+                    <div class="form-group">
+                        <label>Current Password</label>
+                        <input type="password" id="currentPassword" placeholder="Enter current password">
+                    </div>
+                    <div class="form-group">
+                        <label>New Password</label>
+                        <input type="password" id="newPassword" placeholder="Enter new password">
+                        <small style="color: #666; font-size: 12px;">At least 8 characters with uppercase, lowercase, and numbers</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Confirm New Password</label>
+                        <input type="password" id="confirmPassword" placeholder="Confirm new password">
+                    </div>
+                    <div class="form-actions">
+                        <button class="save-btn" id="updatePwdBtn">Update Password</button>
+                        <button class="cancel-btn" id="cancelPwdBtn">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer>
+    <div class="footer-container">
+        <div class="footer-info">
+            <h4>Campus Connect</h4>
+            <p>Connecting students for better learning, collaboration, and career opportunities.</p>
+        </div>
+        <div class="contact-info">
+            <h4>Contact Us</h4>
+            <ul>
+                <li><i class="fas fa-envelope"></i> support@campusconnect.com</li>
+                <li><i class="fas fa-phone"></i> +251 912 345 678</li>
+                <li><i class="fas fa-map-marker-alt"></i> Addis Ababa, Ethiopia</li>
+            </ul>
+        </div>
+        <div class="social-media">
+            <h4>Follow Us</h4>
+            <div class="social-icons">
+                <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-telegram"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-tiktok"></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="copyright">
+        <p>&copy; 2025 Campus Connect. All rights reserved.</p>
+    </div>
+</footer>
+
+<script src="../JS/global.js"></script>
+
+<script>
+    (function() {
+        const API_BASE = '/campus-connect/php--campus-connect-application-2/backendpart';
+        let currentUser = null;
+        
+        // Get CSRF token
+        async function getCSRFToken() {
+            try {
+                const response = await fetch(API_BASE + '/auth/csrf_token.php');
+                const data = await response.json();
+                return data.csrf_token;
+            } catch (error) {
+                console.error('Error getting CSRF token:', error);
+                return '';
+            }
+        }
+        
+        // Check authentication and load profile
+        async function checkAuth() {
+            try {
+                const response = await fetch(API_BASE + '/auth/check_auth.php');
+                const data = await response.json();
+                
+                if (data.authenticated) {
+                    currentUser = data.user;
+                    displayProfile();
+                } else {
+                    window.location.href = 'login.html';
+                }
+            } catch (error) {
+                console.error('Auth check failed:', error);
+                window.location.href = 'login.html';
+            }
+        }
+        
+        // Display profile information
+        function displayProfile() {
+            document.getElementById('profileName').textContent = currentUser.fullname || 'Student';
+            document.getElementById('profileRole').textContent = currentUser.role === 'admin' ? 'Administrator' : 'Student';
+            document.getElementById('displayEmail').textContent = currentUser.email || '-';
+            document.getElementById('displayStudentId').textContent = currentUser.student_id || 'Not assigned';
+            document.getElementById('displayDepartment').textContent = currentUser.department || 'Not specified';
+            document.getElementById('displayYear').textContent = currentUser.year ? currentUser.year + 'th Year' : 'Not specified';
+            document.getElementById('displayPhone').textContent = currentUser.phone || 'Not specified';
+            document.getElementById('displayBio').textContent = currentUser.bio || 'No bio added yet. Click edit to tell us about yourself!';
+            
+            document.getElementById('editDepartment').value = currentUser.department || '';
+            document.getElementById('editYear').value = currentUser.year || '1';
+            document.getElementById('editPhone').value = currentUser.phone || '';
+            document.getElementById('editBio').value = currentUser.bio || '';
+        }
+        
+        // Show edit form
+        function showEditForm() {
+            document.getElementById('viewMode').style.display = 'none';
+            document.getElementById('editMode').style.display = 'block';
+            document.getElementById('changePwdMode').style.display = 'none';
+        }
+        
+        // Hide edit form
+        function hideEditForm() {
+            document.getElementById('viewMode').style.display = 'block';
+            document.getElementById('editMode').style.display = 'none';
+            document.getElementById('changePwdMode').style.display = 'none';
+        }
+        
+        // Show change password form
+        function showChangePasswordForm() {
+            document.getElementById('viewMode').style.display = 'none';
+            document.getElementById('editMode').style.display = 'none';
+            document.getElementById('changePwdMode').style.display = 'block';
+            document.getElementById('currentPassword').value = '';
+            document.getElementById('newPassword').value = '';
+            document.getElementById('confirmPassword').value = '';
+        }
+        
+        // Hide change password form
+        function hideChangePasswordForm() {
+            document.getElementById('viewMode').style.display = 'block';
+            document.getElementById('editMode').style.display = 'none';
+            document.getElementById('changePwdMode').style.display = 'none';
+        }
+        
+        // Save profile changes
+        async function saveProfile() {
+            const csrfToken = await getCSRFToken();
+            
+            const updatedData = {
+                csrf_token: csrfToken,
+                department: document.getElementById('editDepartment').value,
+                year: document.getElementById('editYear').value,
+                phone: document.getElementById('editPhone').value,
+                bio: document.getElementById('editBio').value
+            };
+            
+            const saveBtn = document.getElementById('saveProfileBtn');
+            const originalText = saveBtn.innerHTML;
+            saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+            saveBtn.disabled = true;
+            
+            try {
+                const response = await fetch(API_BASE + '/auth/update_profile.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(updatedData)
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    alert('Profile updated successfully!');
+                    currentUser.department = updatedData.department;
+                    currentUser.year = updatedData.year;
+                    currentUser.phone = updatedData.phone;
+                    currentUser.bio = updatedData.bio;
+                    displayProfile();
+                    hideEditForm();
+                } else {
+                    alert('Error: ' + data.message);
+                }
+            } catch (error) {
+                console.error('Error updating profile:', error);
+                alert('Failed to update profile. Please try again.');
+            } finally {
+                saveBtn.innerHTML = originalText;
+                saveBtn.disabled = false;
+            }
+        }
+        
+        // Change password
+        async function changePassword() {
+            const csrfToken = await getCSRFToken();
+            
+            const currentPassword = document.getElementById('currentPassword').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            if (!currentPassword || !newPassword || !confirmPassword) {
+                alert('Please fill in all password fields');
+                return;
+            }
+            
+            if (newPassword !== confirmPassword) {
+                alert('New passwords do not match');
+                return;
+            }
+            
+            if (newPassword.length < 8) {
+                alert('Password must be at least 8 characters');
+                return;
+            }
+            
+            const passwordData = {
+                csrf_token: csrfToken,
+                current_password: currentPassword,
+                new_password: newPassword,
+                confirm_password: confirmPassword
+            };
+            
+            const changeBtn = document.getElementById('updatePwdBtn');
+            const originalText = changeBtn.innerHTML;
+            changeBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Updating...';
+            changeBtn.disabled = true;
+            
+            try {
+                const response = await fetch(API_BASE + '/auth/change_password.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(passwordData)
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    alert('Password changed successfully! Please login again.');
+                    window.location.href = 'login.html';
+                } else {
+                    alert('Error: ' + data.message);
+                }
+            } catch (error) {
+                console.error('Error changing password:', error);
+                alert('Failed to change password. Please try again.');
+            } finally {
+                changeBtn.innerHTML = originalText;
+                changeBtn.disabled = false;
+            }
+        }
+        
+        // Initialize event listeners
+        function initEventListeners() {
+            document.getElementById('editProfileBtn').addEventListener('click', showEditForm);
+            document.getElementById('cancelEditBtn').addEventListener('click', hideEditForm);
+            document.getElementById('changePwdBtn').addEventListener('click', showChangePasswordForm);
+            document.getElementById('cancelPwdBtn').addEventListener('click', hideChangePasswordForm);
+            document.getElementById('saveProfileBtn').addEventListener('click', saveProfile);
+            document.getElementById('updatePwdBtn').addEventListener('click', changePassword);
+        }
+        
+        // Initialize page
+        function init() {
+            checkAuth();
+            initEventListeners();
+        }
+        
+        init();
+    })();
+</script>
+
+</body>
+</html>

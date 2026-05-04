@@ -1,0 +1,311 @@
+/* ========================================
+   STUDY GROUPS PAGE SPECIFIC STYLES ONLY
+   (Navbar & Footer come from global.css)
+   ======================================== */
+
+/* Container */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Page Header */
+.page-header {
+    margin: 2rem 0;
+    text-align: center;
+}
+
+.page-header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2rem;
+    margin-bottom: 0.5rem;
+    color: #1a1a1a;
+}
+
+.page-header p {
+    color: #666;
+    font-size: 1rem;
+}
+
+/* Dashboard Grid */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 2rem;
+    align-items: start;
+}
+
+/* Cards with Glow */
+.card {
+    background: #ffffff;
+    padding: 2rem;
+    border-radius: 12px;
+    margin-bottom: 2rem;
+    border: 2px solid #38ef7d;
+    box-shadow: 0 0 20px rgba(56, 239, 125, 0.35);
+}
+
+.form-card h3 {
+    font-size: 1.4rem;
+    margin-bottom: 1.5rem;
+    color: #11998e;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Form Groups */
+.form-group {
+    margin-bottom: 1.2rem;
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.9rem;
+    color: #555;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+input, select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background: #fdfdfd;
+    outline: none;
+    transition: 0.3s;
+}
+
+input:focus, select:focus {
+    border-color: #38ef7d;
+    background: #fff;
+    box-shadow: 0 0 5px rgba(56, 239, 125, 0.35);
+}
+
+/* Day Selector Buttons */
+.day-selector {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.day-btn {
+    font-size: 0.85rem;
+    padding: 8px 16px;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: 0.2s;
+    background: white;
+}
+
+.day-btn:hover {
+    border-color: #38ef7d;
+    color: #38ef7d;
+}
+
+.day-btn.selected {
+    background: #38ef7d;
+    color: white;
+    border-color: #38ef7d;
+    box-shadow: 0 0 10px rgba(56, 239, 125, 0.35);
+}
+
+/* Buttons */
+button {
+    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+    color: white;
+    border: none;
+    padding: 12px;
+    width: 100%;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s;
+    font-size: 1rem;
+    box-shadow: 0 4px 15px rgba(56, 239, 125, 0.4);
+}
+
+button:hover {
+    opacity: 0.95;
+    transform: translateY(-2px);
+}
+
+button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.btn-join {
+    padding: 8px;
+    font-size: 0.9rem;
+    margin-top: 10px;
+    width: 100%;
+}
+
+/* Section Header */
+.section-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.badge-count {
+    background: #333;
+    color: white;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+}
+
+/* Groups Container */
+#groups-container {
+    max-height: 800px;
+    overflow-y: auto;
+    padding: 10px;
+}
+
+/* Group Card */
+.group-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1.2rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border: 2px solid #38ef7d;
+    box-shadow: 0 0 15px rgba(56, 239, 125, 0.35);
+    transition: transform 0.2s;
+}
+
+.group-card:hover {
+    transform: translateY(-3px);
+}
+
+.group-info h4 {
+    font-size: 1.1rem;
+    margin-bottom: 5px;
+    font-weight: 700;
+    color: #333;
+}
+
+.group-meta {
+    font-size: 0.85rem;
+    color: #666;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+}
+
+.group-meta span {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.group-members, .group-organizer {
+    font-size: 0.85rem;
+    color: #555;
+    padding-top: 5px;
+    margin-top: 5px;
+}
+
+.group-members i, .group-organizer i {
+    color: #11998e;
+    width: 20px;
+}
+
+.group-description {
+    font-size: 0.85rem;
+    color: #777;
+    margin-top: 5px;
+    padding-top: 5px;
+    border-top: 1px solid #eee;
+}
+
+/* Loading & Error States */
+.loading-message, .error-message, .no-groups {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+}
+
+.error-message {
+    color: #dc3545;
+}
+
+.loading-message i {
+    margin-right: 8px;
+}
+
+.join-success {
+    background: #28a745 !important;
+}
+
+.join-error {
+    background: #dc3545 !important;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 15px;
+    }
+    
+    .page-header h1 {
+        font-size: 1.8rem;
+    }
+    
+    .card {
+        padding: 1.5rem;
+    }
+    
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+    
+    .day-selector {
+        gap: 8px;
+    }
+    
+    .day-btn {
+        padding: 6px 12px;
+        font-size: 0.75rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .page-header h1 {
+        font-size: 1.5rem;
+    }
+    
+    .form-card h3 {
+        font-size: 1.2rem;
+    }
+    
+    .group-meta {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+}

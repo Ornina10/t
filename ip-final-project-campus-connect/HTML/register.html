@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Campus Connect</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #d7d6d6 0%, #bec7c2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .register-container {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 500px;
+        }
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .logo img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        input, select {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        button:hover {
+            opacity: 0.9;
+        }
+        .link {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .link a {
+            color: #11998e;
+            text-decoration: none;
+        }
+        .error {
+            color: red;
+            text-align: center;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        .success {
+            color: green;
+            text-align: center;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        .error-list {
+            color: red;
+            text-align: center;
+            margin-top: 10px;
+            font-size: 14px;
+            list-style: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="register-container">
+        <div class="logo">
+            <img src="../IMAGES/pro logo-modified.png" alt="Campus Connect Logo" class="logo-img" onerror="this.src='https://via.placeholder.com/40x40?text=CC'">
+        </div>
+        <h2>Create Account</h2>
+        <form id="registerForm">
+            <input type="text" id="fullname" placeholder="Full Name" required>
+            <input type="email" id="email" placeholder="Email (@aastustudent.edu.et)" required>
+            <input type="password" id="password" placeholder="Password (min 8 chars, A-Z, a-z, 0-9)" required>
+            <input type="password" id="confirm_password" placeholder="Confirm Password" required>
+            <input type="text" id="student_id" placeholder="Student ID" required>
+            <input type="text" id="department" placeholder="Department">
+            <select id="year">
+                <option value="1">1st Year</option>
+                <option value="2">2nd Year</option>
+                <option value="3">3rd Year</option>
+                <option value="4">4th Year</option>
+                <option value="5">5th Year</option>
+            </select>
+            <input type="tel" id="phone" placeholder="Phone (09xxxxxxxx)">
+            <button type="submit">Register</button>
+        </form>
+        <div class="link">
+            <p>Already have an account? <a href="login.html">Login here</a></p>
+        </div>
+        <div id="message" class="error"></div>
+    </div>
+    <script src="../JS/global.js"></script>
+    
+<script>
+    let csrfToken = '';
+
+    // FIXED: Use csrf_token.php (not get_csrf_token.php)
+    async function getCSRFToken() {
+        try {
+            const response = await fetch('/campus-connect/php--campus-connect-application-2/backendpart/auth/csrf_token.php');
+            const data = await response.json();
+            csrfToken = data.csrf_token;
+            console.log('CSRF Token obtained:', csrfToken);
+        } catch (error) {
+            console.error('Error getting CSRF token:', error);
+        }
+    }
+
+    const registerForm = document.getElementById('registerForm');
+    const messageDiv = document.getElementById('message');
+
+    registerForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        await getCSRFToken();
+        
+        const fullname = document.getElementById('fullname').value;
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const confirm_password = document.getElementById('confirm_password').value;
+        const student_id = document.getElementById('student_id').value;
+        const department = document.getElementById('department').value;
+        const year = document.getElementById('year').value;
+        const phone = document.getElementById('phone').value;
+        
+        // Client-side validation
+        if (password !== confirm_password) {
+            messageDiv.className = 'error';
+            messageDiv.textContent = 'Passwords do not match';
+            return;
+        }
+        
+        if (password.length < 8) {
+            messageDiv.className = 'error';
+            messageDiv.textContent = 'Password must be at least 8 characters';
+            return;
+        }
+        
+        if (!email.includes('@aastustudent.edu.et') && !email.includes('@astu.edu.et')) {
+            messageDiv.className = 'error';
+            messageDiv.textContent = 'Please use your AASTU student email (@aastustudent.edu.et)';
+            return;
+        }
+        
+        const formData = new URLSearchParams();
+        formData.append('csrf_token', csrfToken);
+        formData.append('fullname', fullname);
+        formData.append('email', email);
+        formData.append('password', password);
+        formData.append('confirm_password', confirm_password);
+        formData.append('student_id', student_id);
+        formData.append('department', department);
+        formData.append('year', year);
+        formData.append('phone', phone);
+        
+        try {
+            const response = await fetch('/campus-connect/php--campus-connect-application-2/backendpart/auth/register.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: formData
+            });
+            
+            const data = await response.json();
+            console.log('Registration response:', data);
+            
+            if (data.success) {
+                messageDiv.className = 'success';
+                messageDiv.textContent = 'Registration successful! Redirecting to login...';
+                
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 2000);
+            } else {
+                messageDiv.className = 'error';
+                if (data.errors && data.errors.length > 0) {
+                    messageDiv.innerHTML = data.errors.join('<br>');
+                } else {
+                    messageDiv.textContent = data.message || 'Registration failed. Please try again.';
+                }
+            }
+        } catch (error) {
+            console.error('Registration error:', error);
+            messageDiv.className = 'error';
+            messageDiv.textContent = 'Registration failed. Please try again.';
+        }
+    });
+
+    getCSRFToken();
+</script>
+</body>
+</html>

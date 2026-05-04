@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Campus Connect</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #d7d6d6 0%, #bec7c2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .login-container {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .logo img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        .checkbox {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 15px 0;
+        }
+        .checkbox input {
+            width: auto;
+            margin: 0;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        button:hover {
+            opacity: 0.9;
+        }
+        .link {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .link a {
+            color: #11998e;
+            text-decoration: none;
+        }
+        .error {
+            color: red;
+            text-align: center;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        .success {
+            color: green;
+            text-align: center;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="logo">
+            <img src="../IMAGES/pro logo-modified.png" alt="Campus Connect Logo" class="logo-img" onerror="this.src='https://via.placeholder.com/40x40?text=CC'">
+        </div>
+        <h2>Login to Campus Connect</h2>
+        <form id="loginForm">
+            <input type="email" id="email" placeholder="Email (use @aastustudent.edu.et)" required>
+            <input type="password" id="password" placeholder="Password" required>
+            <div class="checkbox">
+                <input type="checkbox" id="remember_me">
+                <label for="remember_me">Remember Me</label>
+            </div>
+            <button type="submit">Login</button>
+        </form>
+        <div class="link">
+            <p>Don't have an account? <a href="register.html">Register here</a></p>
+        </div>
+        <div id="message" class="error"></div>
+    </div>
+    <script src="../JS/global.js"></script>
+    <script>
+        // First, get CSRF token
+        let csrfToken = '';
+
+        async function getCSRFToken() {
+            try {
+                const response = await fetch('/campus-connect/php--campus-connect-application-2/backendpart/auth/csrf_token.php');
+                const data = await response.json();
+                csrfToken = data.csrf_token;
+            } catch (error) {
+                console.error('Error getting CSRF token:', error);
+            }
+        }
+
+        const loginForm = document.getElementById('loginForm');
+        const messageDiv = document.getElementById('message');
+
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            await getCSRFToken();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const rememberMe = document.getElementById('remember_me').checked;
+            
+            // Create form data
+            const formData = new URLSearchParams();
+            formData.append('csrf_token', csrfToken);
+            formData.append('email', email);
+            formData.append('password', password);
+            formData.append('remember_me', rememberMe);
+            
+            try {
+                const response = await fetch('/campus-connect/php--campus-connect-application-2/backendpart/auth/login.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    messageDiv.className = 'success';
+                    messageDiv.textContent = 'Login successful! Redirecting...';
+                    
+                    // Store user info in localStorage
+                    localStorage.setItem('isLoggedIn', 'true');
+                    localStorage.setItem('user_name', data.data.fullname);
+                    localStorage.setItem('user_email', data.data.email);
+                    localStorage.setItem('user_role', data.data.role);
+                    
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.html';
+                    }, 1000);
+                } else {
+                    messageDiv.className = 'error';
+                    messageDiv.textContent = data.message || 'Login failed';
+                }
+            } catch (error) {
+                messageDiv.className = 'error';
+                messageDiv.textContent = 'Login failed. Please try again.';
+            }
+        });
+
+        // Get CSRF token on page load
+        getCSRFToken();
+    </script>
+</body>
+</html>

@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Campus Connect</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Poppins', sans-serif; background: #f0f2f5; }
+        
+        .admin-wrapper { display: flex; min-height: 100vh; }
+        
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(135deg, #11998e, #0d7a6e);
+            color: white;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+        }
+        
+        .sidebar-header { padding: 25px 20px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.2); }
+        .sidebar-header h3 { font-size: 24px; font-weight: 600; }
+        .sidebar-header h3 i { margin-right: 10px; }
+        
+        .sidebar-nav { padding: 20px 0; }
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 25px;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s;
+            font-size: 15px;
+        }
+        .sidebar-nav a:hover, .sidebar-nav a.active {
+            background: rgba(255,255,255,0.2);
+            border-left: 4px solid #fff;
+            padding-left: 21px;
+        }
+        .sidebar-nav i { width: 22px; font-size: 18px; }
+        
+        .main-content { flex: 1; margin-left: 280px; padding: 20px; }
+        
+        .top-bar {
+            background: white;
+            padding: 18px 25px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .top-bar h2 { font-size: 24px; font-weight: 600; color: #333; }
+        .logout-btn {
+            background: #dc3545;
+            color: white;
+            padding: 8px 25px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        .logout-btn:hover { background: #c82333; transform: translateY(-2px); }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+        .stat-card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
+        .stat-card i { font-size: 45px; color: #11998e; margin-bottom: 10px; }
+        .stat-card h3 { font-size: 32px; margin: 10px 0; color: #333; }
+        .stat-card p { color: #666; font-size: 14px; }
+        
+        .data-card {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .data-card h3 {
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #11998e;
+            color: #333;
+            font-size: 20px;
+        }
+        
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; }
+        th { background: #f8f9fa; font-weight: 600; color: #555; }
+        tr:hover { background: #f8f9fa; }
+        
+        .btn-sm {
+            padding: 6px 14px;
+            border-radius: 20px;
+            border: none;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 500;
+            transition: all 0.3s;
+            margin: 0 3px;
+        }
+        .btn-delete { background: #6c757d; color: white; }
+        .btn-delete:hover { background: #5a6268; }
+        .toggle-btn {
+            background: #ffc107;
+            color: #333;
+            padding: 5px 12px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 12px;
+            margin-right: 5px;
+        }
+        .toggle-btn:hover { background: #e0a800; }
+        .btn-add {
+            background: #11998e;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        .btn-add:hover { background: #0d7a6e; transform: translateY(-2px); }
+        
+        .status-active { color: #28a745; font-weight: bold; }
+        .status-inactive { color: #dc3545; font-weight: bold; }
+        
+        .announcement-form {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            align-items: flex-start;
+        }
+        .announcement-form input, .announcement-form textarea {
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-family: 'Poppins', sans-serif;
+            flex: 1;
+        }
+        .announcement-form input { min-width: 200px; }
+        .announcement-form textarea { min-width: 250px; resize: vertical; }
+        
+        .loading { text-align: center; padding: 40px; color: #666; }
+        .loading i { margin-right: 8px; }
+        
+        .admin-name {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #e8f5e9;
+            padding: 6px 15px;
+            border-radius: 30px;
+            color: #11998e;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        .top-bar-right { display: flex; align-items: center; gap: 15px; }
+        
+        @media (max-width: 992px) {
+            .sidebar { width: 80px; }
+            .sidebar-header h3 span, .sidebar-nav span { display: none; }
+            .sidebar-nav a { justify-content: center; padding: 14px; }
+            .main-content { margin-left: 80px; }
+        }
+        @media (max-width: 768px) {
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .announcement-form { flex-direction: column; }
+            table { font-size: 13px; }
+            th, td { padding: 8px; }
+            .top-bar { flex-direction: column; gap: 10px; text-align: center; }
+            .top-bar-right { justify-content: center; }
+        }
+        @media (max-width: 480px) { .stats-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+<div class="admin-wrapper">
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h3><i class="fas fa-crown"></i> <span>Admin Panel</span></h3>
+        </div>
+        <div class="sidebar-nav">
+            <a href="#" class="active" data-section="dashboard"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></a>
+            <a href="#" data-section="users"><i class="fas fa-users"></i> <span>Users</span></a>
+            <a href="#" data-section="internships"><i class="fas fa-briefcase"></i> <span>Internships</span></a>
+            <a href="#" data-section="mentors"><i class="fas fa-chalkboard-user"></i> <span>Mentors</span></a>
+            <a href="#" data-section="studygroups"><i class="fas fa-users"></i> <span>Study Groups</span></a>
+            <a href="#" data-section="materials"><i class="fas fa-book"></i> <span>Materials</span></a>
+            <a href="#" data-section="announcements"><i class="fas fa-bullhorn"></i> <span>Announcements</span></a>
+        </div>
+    </div>
+    
+    <div class="main-content">
+        <div class="top-bar">
+            <h2 id="pageTitle">Dashboard</h2>
+            <div class="top-bar-right">
+                <span class="admin-name" id="adminName"><i class="fas fa-user-shield"></i> Admin</span>
+                <a href="../home.html" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </div>
+        </div>
+        <div id="dynamicContent">
+            <div class="loading"><i class="fas fa-spinner fa-spin"></i> Loading dashboard...</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const API_BASE = '/campus-connect/php--campus-connect-application-2/backendpart';
+    let currentSection = 'dashboard';
+    let currentAdminId = null;
+    let currentAdminName = 'Admin';
+    
+    // Check Admin Authentication
+    async function checkAdminAuth() {
+        try {
+            const res = await fetch(API_BASE + '/auth/check_auth.php');
+            const data = await res.json();
+            if (data.authenticated && data.user.role === 'admin') {
+                currentAdminId = data.user.id;
+                currentAdminName = data.user.fullname;
+                document.getElementById('adminName').innerHTML = `<i class="fas fa-user-shield"></i> ${currentAdminName}`;
+            } else {
+                alert('You must be logged in as an admin');
+                window.location.href = '../login.html';
+            }
+        } catch (err) {
+            console.error('Auth error:', err);
+            alert('Please login as admin');
+            window.location.href = '../login.html';
+        }
+    }
+    
+    function loadSection(section) {
+        currentSection = section;
+        const titles = {
+            dashboard: 'Dashboard', users: 'Manage Users', internships: 'Manage Internships',
+            mentors: 'Manage Mentors', studygroups: 'Manage Study Groups', materials: 'Manage Materials', announcements: 'Manage Announcements'
+        };
+        document.getElementById('pageTitle').innerHTML = titles[section] || section;
+        
+        if (section === 'dashboard') loadDashboard();
+        else if (section === 'users') loadUsers();
+        else if (section === 'internships') loadInternships();
+        else if (section === 'mentors') loadMentors();
+        else if (section === 'studygroups') loadStudyGroups();
+        else if (section === 'materials') loadMaterials();
+        else if (section === 'announcements') loadAnnouncements();
+    }
+    
+    // ========== DASHBOARD - Fetch from API ==========
+    async function loadDashboard() {
+        const container = document.getElementById('dynamicContent');
+        container.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-spin"></i> Loading stats...</div>';
+        
+        try {
+            const res = await fetch(API_BASE + '/admin/api/get_stats.php');
+            const stats = await res.json();
+            
+            const statsHtml = `
+                <div class="stats-grid">
+                    <div class="stat-card" onclick="loadSection('users')">
+                        <i class="fas fa-users"></i><h3>${stats.total_users || 0}</h3><p>Total Users</p>
+                    </div>
+                    <div class="stat-card" onclick="loadSection('internships')">
+                        <i class="fas fa-briefcase"></i><h3>${stats.total_internships || 0}</h3><p>Internships</p>
+                    </div>
+                    <div class="stat-card" onclick="loadSection('mentors')">
+                        <i class="fas fa-chalkboard-user"></i><h3>${stats.total_mentors || 0}</h3><p>Mentors</p>
+                    </div>
+                    <div class="stat-card" onclick="loadSection('studygroups')">
+                        <i class="fas fa-users"></i><h3>${stats.total_study_groups || 0}</h3><p>Study Groups</p>
+                    </div>
+                    <div class="stat-card" onclick="loadSection('materials')">
+                        <i class="fas fa-book"></i><h3>${stats.total_materials || 0}</h3><p>Materials</p>
+                    </div>
+                </div>
+                <div class="data-card" style="text-align:center;">
+                    <i class="fas fa-chart-line" style="font-size:48px; color:#11998e;"></i>
+                    <h3>Welcome to Admin Panel</h3>
+                    <p>Manage users, internships, mentors, study groups, materials, and announcements.</p>
+                </div>
+            `;
+            container.innerHTML = statsHtml;
+        } catch (error) {
+            container.innerHTML = '<p style="text-align:center;color:#dc3545;">Error loading dashboard</p>';
+        }
+    }
+    
+    // ========== USERS - Fetch from API ==========
+    async function loadUsers() {
+        const container = document.getElementById('dynamicContent');
+        container.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-spin"></i> Loading users...</div>';
+        
+        try {
+            const res = await fetch(API_BASE + '/admin/api/get_users.php');
+            const data = await res.json();
+            
+            if (data.success && data.data.length > 0) {
+                let html = `<div class="data-card"><h3><i class="fas fa-users"></i> Manage Users</h3>
+                    <div style="overflow-x: auto;"><table>
+                        <thead>
+                            <tr><th>ID</th><th>Full Name</th><th>Email</th><th>Role</th><th>Status</th><th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>`;
+                
+                data.data.forEach(user => {
+                    const isCurrentAdmin = user.id === currentAdminId;
+                    html += `<tr>
+                        <td>${user.id}</td>
+                        <td>${escapeHtml(user.fullname)}${isCurrentAdmin ? ' <span style="background:#ffc107; padding:2px 8px; border-radius:20px; font-size:11px;">You</span>' : ''}</td>
+                        <td>${escapeHtml(user.email)}</td>
+                        <td>${user.role === 'admin' ? 'Admin' : 'Student'}</td>
+                        <td class="${user.is_active == 1 ? 'status-active' : 'status-inactive'}">${user.is_active == 1 ? 'Active' : 'Inactive'}</td>
+                        <td>${user.role === 'admin' && user.id === currentAdminId ? '<span style="color:#999;">Protected</span>' : `<button class="toggle-btn" onclick="toggleUserStatus(${user.id}, ${user.is_active})">Toggle</button><button class="btn-delete btn-sm" onclick="deleteUser(${user.id})">Delete</button>`}</td>
+                    </tr>`;
+                });
+                html += `</tbody></table></div></div>`;
+                container.innerHTML = html;
+            } else {
+                container.innerHTML = '<div class="data-card"><p>No users found</p></div>';
+            }
+        } catch (error) {
+            container.innerHTML = '<div class="data-card"><p style="color:#dc3545;">Error loading users</p></div>';
+        }
+    }
+    
+    async function toggleUserStatus(id, currentStatus) {
+        const newStatus = currentStatus == 1 ? 0 : 1;
+        try {
+            const res = await fetch(API_BASE + '/admin/api/update_user_status.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id, is_active: newStatus })
+            });
+            const data = await res.json();
+            if (data.success) {
+                alert('User status updated');
+                loadUsers();
+            } else {
+                alert('Error updating status');
+            }
+        } catch (error) {
+            alert('Network error');
+        }
+    }
+    
+    async function deleteUser(id) {
+        if (!confirm('Are you sure? This action cannot be undone.')) return;
+        try {
+            const res = await fetch(API_BASE + '/admin/api/delete_user.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id })
+            });
+            const data = await res.json();
+            if (data.success) {
+                alert('User deleted');
+                loadUsers();
+                loadDashboard();
+            } else {
+                alert('Delete failed');
+            }
+        } catch (error) {
+            alert('Network error');
+        }
+    }
+    
+    // ========== INTERNSHIPS ==========
+    async function loadInternships() {
+        const container = document.getElementById('dynamicContent');
+        container.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-spin"></i> Loading internships...</div>';
+        
+        try {
+            const res = await fetch(API_BASE + '/admin/api/get_internships.php');
+            const data = await res.json();
+            
+            if (data.success && data.data.length > 0) {
+                let html = `<div class="data-card"><h3><i class="fas fa-briefcase"></i> Manage Internships</h3>
+                    <div style="overflow-x: auto;"><table>
+                        <thead><tr><th>ID</th><th>Title</th><th>Company</th><th>Deadline</th><th>Actions</th></tr></thead>
+                        <tbody>`;
+                data.data.forEach(intern => {
+                    html += `<tr>
+                        <td>${intern.id}</td>
+                        <td>${escapeHtml(intern.title)}</td>
+                        <td>${escapeHtml(intern.company)}</td>
+                        <td>${intern.deadline}</td>
+                        <td><button class="btn-delete btn-sm" onclick="deleteInternship(${intern.id})">Delete</button></td>
+                    </tr>`;
+                });
+                html += `</tbody></table></div></div>`;
+                container.innerHTML = html;
+            } else {
+                container.innerHTML = '<div class="data-card"><p>No internships found</p></div>';
+            }
+        } catch (error) {
+            container.innerHTML = '<div class="data-card"><p style="color:#dc3545;">Error loading internships</p></div>';
+        }
+    }
+    
+    async function deleteInternship(id) {
+        if (!confirm('Delete this internship?')) return;
+        try {
+            const res = await fetch(API_BASE + '/admin/api/delete_internship.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id })
+            });
+            const data = await res.json();
+            if (data.success) {
+                alert('Internship deleted');
+                loadInternships();
+                loadDashboard();
+            } else {
+                alert('Delete failed');
+            }
+        } catch (error) {
+            alert('Network error');
+        }
+    }
+    
+    // ========== MENTORS ==========
+    async function loadMentors() {
+        const container = document.getElementById('dynamicContent');
+        container.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-spin"></i> Loading mentors...</div>';
+        
+        try {
+            const res = await fetch(API_BASE + '/admin/api/get_mentors.php');
+            const data = await res.json();
+            
+            if (data.success && data.data.length > 0) {
+                let html = `<div class="data-card"><h3><i class="fas fa-chalkboard-user"></i> Manage Mentors</h3>
+                    <div style="overflow-x: auto;"><table>
+                        <thead><tr><th>ID</th><th>Name</th><th>Email</th><th>Skills</th><th>Actions</th></tr></thead>
+                        <tbody>`;
+                data.data.forEach(mentor => {
+                    html += `<tr>
+                        <td>${mentor.id}</td>
+                        <td>${escapeHtml(mentor.name)}</td>
+                        <td>${escapeHtml(mentor.email)}</td>
+                        <td>${escapeHtml(mentor.skills)}</td>
+                        <td><button class="btn-delete btn-sm" onclick="deleteMentor(${mentor.id})">Delete</button></td>
+                    </tr>`;
+                });
+                html += `</tbody></table></div></div>`;
+                container.innerHTML = html;
+            } else {
+                container.innerHTML = '<div class="data-card"><p>No mentors found</p></div>';
+            }
+        } catch (error) {
+            container.innerHTML = '<div class="data-card"><p style="color:#dc3545;">Error loading mentors</p></div>';
+        }
+    }
+    
+    async function deleteMentor(id) {
+        if (!confirm('Delete this mentor?')) return;
+        try {
+            const res = await fetch(API_BASE + '/admin/api/delete_mentor.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id })
+            });
+            const data = await res.json();
+            if (data.success) {
+                alert('Mentor deleted');
+                loadMentors();
+                loadDashboard();
+            } else {
+                alert('Delete failed');
+            }
+        } catch (error) {
+            alert('Network error');
+        }
+    }
+    
+    // ========== STUDY GROUPS ==========
+    async function loadStudyGroups() {
+        const container = document.getElementById('dynamicContent');
+        container.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-spin"></i> Loading study groups...</div>';
+        
+        try {
+            const res = await fetch(API_BASE + '/admin/api/get_study_groups.php');
+            const data = await res.json();
+            
+            if (data.success && data.data.length > 0) {
+                let html = `<div class="data-card"><h3><i class="fas fa-users"></i> Manage Study Groups</h3>
+                    <div style="overflow-x: auto;"><table>
+                        <thead><tr><th>ID</th><th>Group Name</th><th>Subject</th><th>Members</th><th>Actions</th></tr></thead>
+                        <tbody>`;
+                data.data.forEach(group => {
+                    html += `<tr>
+                        <td>${group.id}</td>
+                        <td>${escapeHtml(group.name)}</td>
+                        <td>${escapeHtml(group.course_name)}</td>
+                        <td>${group.member_count || 1}/${group.max_members || 20}</td>
+                        <td><button class="btn-delete btn-sm" onclick="deleteGroup(${group.id})">Delete</button></td>
+                    </tr>`;
+                });
+                html += `</tbody></table></div></div>`;
+                container.innerHTML = html;
+            } else {
+                container.innerHTML = '<div class="data-card"><p>No study groups found</p></div>';
+            }
+        } catch (error) {
+            container.innerHTML = '<div class="data-card"><p style="color:#dc3545;">Error loading study groups</p></div>';
+        }
+    }
+    
+    async function deleteGroup(id) {
+        if (!confirm('Delete this study group?')) return;
+        try {
+            const res = await fetch(API_BASE + '/admin/api/delete_group.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id })
+            });
+            const data = await res.json();
+            if (data.success) {
+                alert('Study group deleted');
+                loadStudyGroups();
+                loadDashboard();
+            } else {
+                alert('Delete failed');
+            }
+        } catch (error) {
+            alert('Network error');
+        }
+    }
+    
+    // ========== MATERIALS ==========
+    async function loadMaterials() {
+        const container = document.getElementById('dynamicContent');
+        container.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-spin"></i> Loading materials...</div>';
+        
+        try {
+            const res = await fetch(API_BASE + '/admin/api/get_materials.php');
+            const data = await res.json();
+            
+            if (data.success && data.data.length > 0) {
+                let html = `<div class="data-card"><h3><i class="fas fa-book"></i> Manage Materials</h3>
+                    <div style="overflow-x: auto;"><table>
+                        <thead><tr><th>ID</th><th>Title</th><th>Uploaded By</th><th>Downloads</th><th>Actions</th></tr></thead>
+                        <tbody>`;
+                data.data.forEach(mat => {
+                    html += `<tr>
+                        <td>${mat.id}</td>
+                        <td>${escapeHtml(mat.title)}</td>
+                        <td>${escapeHtml(mat.full_name)}</td>
+                        <td>${mat.downloads_count || 0}</td>
+                        <td><button class="btn-delete btn-sm" onclick="deleteMaterial(${mat.id})">Delete</button></td>
+                    </tr>`;
+                });
+                html += `</tbody></table></div></div>`;
+                container.innerHTML = html;
+            } else {
+                container.innerHTML = '<div class="data-card"><p>No materials found</p></div>';
+            }
+        } catch (error) {
+            container.innerHTML = '<div class="data-card"><p style="color:#dc3545;">Error loading materials</p></div>';
+        }
+    }
+    
+    async function deleteMaterial(id) {
+        if (!confirm('Delete this material?')) return;
+        try {
+            const res = await fetch(API_BASE + '/admin/api/delete_material.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id })
+            });
+            const data = await res.json();
+            if (data.success) {
+                alert('Material deleted');
+                loadMaterials();
+                loadDashboard();
+            } else {
+                alert('Delete failed');
+            }
+        } catch (error) {
+            alert('Network error');
+        }
+    }
+    
+    // ========== ANNOUNCEMENTS ==========
+    async function loadAnnouncements() {
+        const container = document.getElementById('dynamicContent');
+        container.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-spin"></i> Loading announcements...</div>';
+        
+        try {
+            const res = await fetch(API_BASE + '/admin/api/get_announcements.php');
+            const data = await res.json();
+            
+            let html = `<div class="data-card"><h3><i class="fas fa-bullhorn"></i> Manage Announcements</h3>
+                <div class="announcement-form">
+                    <input type="text" id="newTitle" placeholder="Announcement Title">
+                    <textarea id="newMessage" placeholder="Announcement Message" rows="2"></textarea>
+                    <button onclick="createAnnouncement()" class="btn-add">Add Announcement</button>
+                </div>
+                <div style="overflow-x: auto;"><table>
+                    <thead><tr><th>ID</th><th>Title</th><th>Message</th><th>Created By</th><th>Actions</th></tr></thead>
+                    <tbody>`;
+            
+            if (data.success && data.data.length > 0) {
+                data.data.forEach(ann => {
+                    html += `<tr>
+                        <td>${ann.id}</td>
+                        <td>${escapeHtml(ann.title)}</td>
+                        <td>${escapeHtml(ann.message)}</td>
+                        <td>${escapeHtml(ann.created_by)}</td>
+                        <td><button class="btn-delete btn-sm" onclick="deleteAnnouncement(${ann.id})">Delete</button></td>
+                    </tr>`;
+                });
+            }
+            html += `</tbody></table></div></div>`;
+            container.innerHTML = html;
+        } catch (error) {
+            container.innerHTML = '<div class="data-card"><p style="color:#dc3545;">Error loading announcements</p></div>';
+        }
+    }
+    
+    async function createAnnouncement() {
+        const title = document.getElementById('newTitle').value;
+        const message = document.getElementById('newMessage').value;
+        if (!title || !message) {
+            alert('Title and message are required');
+            return;
+        }
+        
+        try {
+            const res = await fetch(API_BASE + '/admin/api/create_announcement.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ title, message, created_by: currentAdminName })
+            });
+            const data = await res.json();
+            if (data.success) {
+                alert('Announcement created');
+                document.getElementById('newTitle').value = '';
+                document.getElementById('newMessage').value = '';
+                loadAnnouncements();
+                loadDashboard();
+            } else {
+                alert('Failed to create announcement');
+            }
+        } catch (error) {
+            alert('Network error');
+        }
+    }
+    
+    async function deleteAnnouncement(id) {
+        if (!confirm('Delete this announcement?')) return;
+        try {
+            const res = await fetch(API_BASE + '/admin/api/delete_announcement.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id })
+            });
+            const data = await res.json();
+            if (data.success) {
+                alert('Announcement deleted');
+                loadAnnouncements();
+                loadDashboard();
+            } else {
+                alert('Delete failed');
+            }
+        } catch (error) {
+            alert('Network error');
+        }
+    }
+    
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    }
+    
+    // Make functions global
+    window.loadSection = loadSection;
+    window.toggleUserStatus = toggleUserStatus;
+    window.deleteUser = deleteUser;
+    window.deleteInternship = deleteInternship;
+    window.deleteMentor = deleteMentor;
+    window.deleteGroup = deleteGroup;
+    window.deleteMaterial = deleteMaterial;
+    window.createAnnouncement = createAnnouncement;
+    window.deleteAnnouncement = deleteAnnouncement;
+    
+    document.querySelectorAll('.sidebar-nav a').forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            document.querySelectorAll('.sidebar-nav a').forEach(a => a.classList.remove('active'));
+            link.classList.add('active');
+            loadSection(link.getAttribute('data-section'));
+        });
+    });
+    
+    checkAdminAuth().then(() => loadSection('dashboard'));
+</script>
+</body>
+</html>

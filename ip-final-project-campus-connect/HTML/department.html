@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campus Connect – Course Finder</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Cormorant+Garamond:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../CSS/global.css">
+    <link rel="stylesheet" href="../CSS/department.css">
+</head>
+<body>
+
+<!-- Navigation Bar -->
+<header>
+    <nav class="navbar">
+        <div class="logo">
+            <img src="../IMAGES/pro logo-modified.png" alt="Campus Connect Logo" class="logo-img" onerror="this.src='https://via.placeholder.com/40x40?text=CC'">
+            Campus Connect
+        </div>
+        <button class="burger-menu" id="burgerMenu" aria-label="Menu">
+            <i class="fas fa-bars" id="burgerIcon"></i>
+        </button>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="home.html">Home</a></li>
+            <li class="dropdown">
+                <a href="#">Resources <i class="fas fa-chevron-down"></i></a>
+                <ul class="dropdown-menu">
+                    <li><a href="materials.html"><i class="fas fa-book"></i> Study Materials</a></li>
+                    <li><a href="studygroup.html"><i class="fas fa-users"></i> Study Groups</a></li>
+                    <li><a href="department.html" class="active"><i class="fas fa-graduation-cap"></i> Course Finder</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="#">Opportunities <i class="fas fa-chevron-down"></i></a>
+                <ul class="dropdown-menu">
+                    <li><a href="internship.html"><i class="fas fa-briefcase"></i> Internships</a></li>
+                    <li><a href="mentors.html"><i class="fas fa-chalkboard-user"></i> Mentors</a></li>
+                </ul>
+            </li>
+            
+            <!-- ACCOUNT DROPDOWN - Shows when logged in -->
+            <li class="dropdown" id="userDropdown" style="display: none;">
+                <a href="#">Account <i class="fas fa-chevron-down"></i></a>
+                <ul class="dropdown-menu">
+                    <li id="dashboardLink"><a href="dashboard.html"><i class="fas fa-chart-line"></i> Dashboard</a></li>
+                    <li id="profileLink"><a href="profile.html"><i class="fas fa-user-circle"></i> Profile</a></li>
+                    <li id="logoutLink"><a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                </ul>
+            </li>
+            
+            <!-- LOGIN/REGISTER - Shows when logged out -->
+            <li id="loginLink"><a href="login.html"><i class="fas fa-sign-in-alt"></i> Login</a></li>
+            <li id="registerLink"><a href="register.html"><i class="fas fa-user-plus"></i> Register</a></li>
+            
+            <li class="search-nav-item">
+                <form action="search.html" method="get" class="search-form">
+                    <input type="text" name="q" placeholder="Search courses..." required>
+                    <button type="submit" aria-label="Search"><i class="fas fa-search"></i></button>
+                </form>
+            </li>
+            <li class="notification-li">
+                <div class="notification-bell">
+                    <i class="fas fa-bell"></i>
+                    <span id="notificationBadge" class="notification-badge" style="display:none;">0</span>
+                </div>
+                <div id="notificationDropdown" class="notification-dropdown"></div>
+            </li>
+        </ul>
+    </nav>
+</header>
+
+<!-- Main Content -->
+<main class="department-main">
+    <h2 class="section-title">Software Engineering Course Finder</h2>
+    <p class="subtitle">Browse courses by year, semester, or field of study</p>
+
+    <!-- Filters -->
+    <div class="filters-container">
+        <select id="filter-field">
+            <option value="">All Fields</option>
+            <option value="Freshman (Common Courses)">Freshman (Common Courses)</option>
+            <option value="Software Engineering">Software Engineering</option>
+            <option value="Computer Science">Computer Science</option>
+            <option value="Information Technology">Information Technology</option>
+        </select>
+        <select id="filter-year">
+            <option value="">All Years</option>
+            <option value="1">Year 1</option>
+            <option value="2">Year 2</option>
+            <option value="3">Year 3</option>
+            <option value="4">Year 4</option>
+            <option value="5">Year 5</option>
+        </select>
+        <select id="filter-semester">
+            <option value="">All Semesters</option>
+            <option value="1">Semester 1</option>
+            <option value="2">Semester 2</option>
+        </select>
+    </div>
+
+    <!-- Stats Bar -->
+    <div class="stats-bar" id="statsBar" style="display: none;">
+        <span class="course-count" id="courseCount">0 courses found</span>
+        <button class="reset-filters" id="resetFilters">Reset All Filters</button>
+    </div>
+
+    <!-- Results Container -->
+    <div id="results-container">
+        <div class="loading-spinner">
+            <div class="spinner"></div>
+            <p>Loading courses from database...</p>
+        </div>
+    </div>
+</main>
+
+<!-- Footer -->
+<footer>
+    <div class="footer-container">
+        <div class="footer-info">
+            <h4>Campus Connect</h4>
+            <p>Connecting students for better learning, collaboration, and career opportunities.</p>
+        </div>
+        <div class="contact-info">
+            <h4>Contact Us</h4>
+            <ul>
+                <li><i class="fas fa-envelope"></i> support@campusconnect.com</li>
+                <li><i class="fas fa-phone"></i> +251 912 345 678</li>
+                <li><i class="fas fa-map-marker-alt"></i> Addis Ababa, Ethiopia</li>
+            </ul>
+        </div>
+        <div class="social-media">
+            <h4>Follow Us</h4>
+            <div class="social-icons">
+                <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-telegram"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-tiktok"></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="copyright">
+        <p>&copy; 2025 Campus Connect. All rights reserved.</p>
+    </div>
+</footer>
+
+<!-- JavaScript Files -->
+<script src="../JS/global.js"></script>
+<script src="../JS/department.js"></script>
+</body>
+</html>

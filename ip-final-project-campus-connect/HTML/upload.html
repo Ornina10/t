@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Material - Campus Connect</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #ededed, #e1e6e3);
+            min-height: 100vh;
+            padding: 40px;
+        }
+        
+        .upload-container {
+            max-width: 550px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .upload-header {
+            background: linear-gradient(135deg, #11998e, #38ef7d);
+            padding: 30px;
+            text-align: center;
+            color: white;
+        }
+        
+        .upload-header h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        
+        .upload-header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .upload-form {
+            padding: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+        }
+        
+        .form-group label i {
+            margin-right: 8px;
+            color: #11998e;
+        }
+        
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #11998e;
+        }
+        
+        .year-options {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .year-options label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: normal;
+            cursor: pointer;
+        }
+        
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+        
+        .btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        
+        .btn-upload {
+            background: linear-gradient(135deg, #11998e, #38ef7d);
+            color: white;
+        }
+        
+        .btn-upload:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(56, 239, 125, 0.4);
+        }
+        
+        .btn-cancel {
+            background: #f0f0f0;
+            color: #666;
+        }
+        
+        .btn-cancel:hover {
+            background: #e0e0e0;
+        }
+        
+        .message {
+            padding: 15px;
+            margin: 0 30px 30px;
+            border-radius: 8px;
+            display: none;
+        }
+        
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+            display: block;
+        }
+        
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="upload-container">
+        <div class="upload-header">
+            <h1><i class="fas fa-cloud-upload-alt"></i> Upload Study Material</h1>
+            <p>Share your knowledge with fellow students</p>
+        </div>
+        
+        <form id="uploadForm" enctype="multipart/form-data">
+            <div class="upload-form">
+                <div class="form-group">
+                    <label><i class="fas fa-book"></i> Course Title *</label>
+                    <input type="text" id="title" placeholder="Eg. INTERNET PROGRAMMING" required>
+                </div>
+                
+                <div class="form-group">
+                    <label><i class="fas fa-user"></i> Your Name</label>
+                    <input type="text" id="full_name" placeholder="Your name (optional)">
+                </div>
+                
+                <div class="form-group">
+                    <label><i class="fas fa-graduation-cap"></i> Year of Study *</label>
+                    <div class="year-options">
+                        <label><input type="radio" name="year" value="2nd"> 2nd Year</label>
+                        <label><input type="radio" name="year" value="3rd"> 3rd Year</label>
+                        <label><input type="radio" name="year" value="4th"> 4th Year</label>
+                        <label><input type="radio" name="year" value="5th"> 5th Year</label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label><i class="fas fa-building"></i> Department</label>
+                    <select id="department">
+                        <option value="Software Engineering">Software Engineering</option>
+                        <option value="Computer Science">Computer Science</option>
+                        <option value="Computer Engineering">Computer Engineering</option>
+                        <option value="Information Technology">Information Technology</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label><i class="fas fa-tag"></i> Material Type</label>
+                    <select id="material_type">
+                        <option value="Assignment">Assignment</option>
+                        <option value="Module">Module</option>
+                        <option value="Mid Exam">Mid Exam</option>
+                        <option value="Final Exam">Final Exam</option>
+                        <option value="Reference">Reference</option>
+                        <option value="Lecture Note">Lecture Note</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label><i class="fas fa-file"></i> Select File *</label>
+                    <input type="file" id="file" required>
+                </div>
+                
+                <div class="btn-group">
+                    <a href="materials.html" class="btn btn-cancel">Cancel</a>
+                    <button type="submit" class="btn btn-upload">Upload Material</button>
+                </div>
+            </div>
+        </form>
+        
+        <div id="message" class="message"></div>
+    </div>
+    <script src="../JS/global.js"></script>
+    <script>
+        const uploadForm = document.getElementById('uploadForm');
+        const messageDiv = document.getElementById('message');
+        const API_UPLOAD = '/campus-connect/php--campus-connect-application-2/backendpart/resources/upload_resource.php';
+        
+        uploadForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const title = document.getElementById('title').value.trim();
+            const yearRadios = document.querySelectorAll('input[name="year"]');
+            const file = document.getElementById('file').files[0];
+            
+            let selectedYear = '';
+            for (const radio of yearRadios) {
+                if (radio.checked) {
+                    selectedYear = radio.value;
+                    break;
+                }
+            }
+            
+            if (!title) {
+                showMessage('Please enter course title', 'error');
+                return;
+            }
+            
+            if (!selectedYear) {
+                showMessage('Please select a year', 'error');
+                return;
+            }
+            
+            if (!file) {
+                showMessage('Please select a file', 'error');
+                return;
+            }
+            
+            const formData = new FormData();
+            formData.append('title', title);
+            formData.append('full_name', document.getElementById('full_name').value || 'Anonymous');
+            formData.append('year', selectedYear);
+            formData.append('department', document.getElementById('department').value);
+            formData.append('material_type', document.getElementById('material_type').value);
+            formData.append('file', file);
+            
+            const btn = document.querySelector('.btn-upload');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading...';
+            btn.disabled = true;
+            
+            try {
+                const response = await fetch(API_UPLOAD, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    showMessage('✅ Upload successful! Redirecting...', 'success');
+                    setTimeout(() => {
+                        window.location.href = 'materials.html';
+                    }, 1500);
+                } else {
+                    showMessage('❌ Error: ' + data.message, 'error');
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                }
+            } catch (error) {
+                showMessage('❌ Upload failed. Please try again.', 'error');
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        });
+        
+        function showMessage(msg, type) {
+            messageDiv.textContent = msg;
+            messageDiv.className = `message ${type}`;
+            setTimeout(() => {
+                messageDiv.style.display = 'none';
+            }, 4000);
+        }
+    </script>
+</body>
+</html>
