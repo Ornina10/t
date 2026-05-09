@@ -10,9 +10,10 @@ $full_name = $_POST['full_name'] ?? 'Anonymous';
 $year = $_POST['year'] ?? '';
 $department = $_POST['department'] ?? '';
 $material_type = $_POST['material_type'] ?? '';
+$subject = $_POST['subject'] ?? ''; // ✅ NEW
 $uploaded_by = $_SESSION['user_id'] ?? null;
 
-if (empty($title) || empty($year) || !isset($_FILES['file'])) {
+if (empty($title) || empty($year) || empty($subject) || !isset($_FILES['file'])) {
     echo json_encode(['status' => 'error', 'message' => 'Missing required fields']);
     exit;
 }
@@ -27,10 +28,11 @@ $file_name = time() . '_' . preg_replace('/[^a-zA-Z0-9._-]/', '', $file['name'])
 $file_path = $upload_dir . $file_name;
 
 if (move_uploaded_file($file['tmp_name'], $file_path)) {
-    $sql = "INSERT INTO materials (title, full_name, year, department, material_type, file_name, file_path, uploaded_by) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    $sql = "INSERT INTO materials (title, full_name, year, department, material_type, subject, file_name, file_path, uploaded_by) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("sssssssi", $title, $full_name, $year, $department, $material_type, $file_name, $file_path, $uploaded_by);
+    $stmt->bind_param("ssssssssi", $title, $full_name, $year, $department, $material_type, $subject, $file_name, $file_path, $uploaded_by);
     
     if ($stmt->execute()) {
         echo json_encode(['status' => 'success', 'message' => 'Upload successful']);
